@@ -21,11 +21,11 @@ import co.edu.udea.iw.util.validations.Validaciones;
 
 /**
  *  Es la clase que implementa la logica del negocio que es conscerniente a
- *  solicitud, para ello la clase después de verificar las reglas del negocio
+ *  solicitud, para ello la clase despuï¿½s de verificar las reglas del negocio
  *  utiliza las DAO para realizar operaciones en la entidad Solicitud. 
  * Al ser una clase transaccional cualquier error que interumpa 
- * la normal ejecución de un metodo de la clase,genera un rollback 
- * para preservar la integridad de la información de la base de datos.
+ * la normal ejecuciï¿½n de un metodo de la clase,genera un rollback 
+ * para preservar la integridad de la informaciï¿½n de la base de datos.
  * @author Jhonatan Orozco Blandon
  * @version 1
  * @category service
@@ -40,7 +40,7 @@ public class SolicitudService {
 	private DispositivoDAO dispositivoDAO;
 
 	/**
-	 * El método se encarga de comprobar la disponibilidad del dispositivo que se quiere prestar
+	 * El mï¿½todo se encarga de comprobar la disponibilidad del dispositivo que se quiere prestar
 	 * de acuerdo a las fechas que se ingresan en la solicitud.Retorna true cuando las fechas no se traslapan
 	 * con ninguna otra solicitud de prestamo del dispositivo ya aprobada previamente, en caso contrario retorna false
 	 * @param solicitud
@@ -88,8 +88,8 @@ public class SolicitudService {
 	
 	
 	/**
-	 * El método se encarga de verificar que el usuario que esta creando la solicitud
-	 * no tenga pendiente por entregar algún dispositivo al laboratorio.Si retorna
+	 * El mï¿½todo se encarga de verificar que el usuario que esta creando la solicitud
+	 * no tenga pendiente por entregar algï¿½n dispositivo al laboratorio.Si retorna
 	 * true el usuario tiene permisos para crear la solicitud.
 	 * @param solicitud
 	 * @return
@@ -132,7 +132,7 @@ public class SolicitudService {
 	 * Las fechas cumplen con el rango menor a 8 horas
 	 * Las fechas son consistentes
 	 * La solicitud no ha sido creada anteriormente
-	 * El usuario no tiene que devolver ningún dispositivo
+	 * El usuario no tiene que devolver ningï¿½n dispositivo
 	 * El dispositivo tiene disponibilidad en las fechas solicitadas
 	 * En caso de que un criterio falle se rechaza la solicitud
 	 * 
@@ -251,6 +251,28 @@ public class SolicitudService {
 	}
 
 	
+	public void cambiarEstadoSolicitud(Usuario empleado, Usuario cliente, int estado, Solicitud solicitud) throws ServiceException, DaoException{
+		if(estado<1 || estado>3){
+			throw new ServiceException("El estado ingresado no es vÃ¡lido");
+		}
+		if(empleado.getRol().getId()==3){
+			throw new ServiceException("El usuario no puede realizar un cambio de solicitud");
+		}
+		empleado = usuarioDAO.obtener(empleado.getCorreo());
+		if(empleado==null){
+			throw new ServiceException("El empleado no existe");
+		}
+		cliente = usuarioDAO.obtener(cliente.getCorreo());
+		if(cliente==null){
+			throw new ServiceException("El usuario no existe");
+		}
+		solicitud = solicitudDAO.obtenerSolicitud(solicitud.getId());
+		if(solicitud==null){
+			throw new ServiceException("La solicitud no existe");
+		}
+		solicitud.setEstadoSolicitud(estado);
+		solicitudDAO.modificar(solicitud);
+	}
 
 	public UsuarioDAO getUsuarioDAO() {
 		return usuarioDAO;
