@@ -71,5 +71,6 @@
 	</bean>
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<context:component-scan base-package="co.edu.udea.iw.ws"/>
 
 </beans>
