@@ -134,11 +134,6 @@ public class DispositivoService {
 		
 		Dispositivo dispositivo = null;
 		
-		
-		if(dispositivoDAO.obtener(codigo)!=null){
-			throw new DaoException("Ya existe un dispositivo con codigo" + codigo +  " en el sistema");
-		}
-		
 		dispositivo = dispositivoDAO.obtener(codigo);
 		if(dispositivo==null){
 			throw new ServiceException("El dispositivo "+codigo+ " a buscar no existe en el sistema");
