@@ -1,11 +1,14 @@
 package co.edu.udea.iw.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Clase dto para transportar los datos de un dispositivo. Mapea las columnas de la tabla dispositivo
  * @author Yoiner Gomez yoiner.gomez22@gmail.com
  * @version 1
  * @category DTO
  */
+@XmlRootElement
 public class Dispositivo {
 	
 	private Integer codigo;

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Test;
@@ -139,7 +140,7 @@ public class SolicitudServiceTest {
 	/**
 	 * Prueba unitaria para el m�todo registrarSolicitud()
 	 */
-	@Test
+	//@Test
 	@Rollback(false)
 	public void testRegistrarSolicitud() throws ServiceException{
 		try{
@@ -175,6 +176,25 @@ public class SolicitudServiceTest {
 		} catch (DaoException e) {
 			new ServiceException(e.getMessage());
 			fail(e.getMessage());
+		}
+		
+	}
+	
+	/**
+	 * Prueba unitaria para el metodo obtener todos los dispositivos disponibles
+	 * @throws DaoException 
+	 */
+	@Test
+	public void testObtenerDispositivosDisponibles() {
+		List<Dispositivo> dispositivos=null; 
+		try {
+			dispositivos = solicitudService.obtenerDispositivosDisponibles();
+			for(Dispositivo dispositivo:dispositivos){
+				System.out.println("Motivo: "+dispositivo.getNombre());
+			}
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}

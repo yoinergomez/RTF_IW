@@ -2,6 +2,7 @@ package co.edu.udea.iw.service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -249,8 +250,39 @@ public class SolicitudService {
 		solicitudes=solicitudDAO.obtenerSolicitudesDeUnUsuario(usuario, -1);
 		return solicitudes;
 	}
-
 	
+	/**
+	 * Obtiene todos los dispositivos que están disponibles
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<Dispositivo> obtenerDispositivosDisponibles() throws DaoException{
+		List<Solicitud> solicitudes = null;
+		List<Dispositivo> dispositivosSolicitados= null;
+		List<Dispositivo> dispositivosDisponibles= null;
+		solicitudes = solicitudDAO.obtenerTodas();
+		dispositivosSolicitados = new ArrayList<Dispositivo>();
+		dispositivosDisponibles = new ArrayList<Dispositivo>();
+		for (Solicitud solicitud : solicitudes){
+			dispositivosSolicitados.add(solicitud.getId().getDispositivo());
+		}
+		dispositivosDisponibles = dispositivoDAO.obtener();
+		for(Dispositivo dispositivo: dispositivosSolicitados){
+			dispositivosDisponibles.remove(dispositivo);
+		}
+		return dispositivosDisponibles;
+	}
+	
+
+	/**
+	 * Permite al empleado cambiar el estado de una solicitud que haya realizado un usuario
+	 * @param empleado
+	 * @param cliente
+	 * @param estado
+	 * @param solicitud
+	 * @throws ServiceException
+	 * @throws DaoException
+	 */
 	public void cambiarEstadoSolicitud(Usuario empleado, Usuario cliente, int estado, Solicitud solicitud) throws ServiceException, DaoException{
 		if(estado<1 || estado>3){
 			throw new ServiceException("El estado ingresado no es válido");

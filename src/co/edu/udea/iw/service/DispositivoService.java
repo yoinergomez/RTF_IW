@@ -1,5 +1,8 @@
 package co.edu.udea.iw.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -82,10 +85,6 @@ public class DispositivoService {
 			throw new ServiceException("La marca del dispositivo no puede ser nulo, ni una cadena de caracteres vacia");
 		}
 		
-		if(dispositivoDAO.obtener(codigo)!=null){
-			throw new DaoException("Ya existe un dispositivo con codigo" + codigo +  " en el sistema");
-		}
-		
 		dispositivo = dispositivoDAO.obtener(codigo);
 		if(dispositivo==null){
 			throw new ServiceException("El dispositivo "+codigo+ " a modificar no existe en el sistema");
@@ -96,7 +95,7 @@ public class DispositivoService {
 		dispositivo.setMarca(marca);
 		dispositivo.setCaracteristicas(caracteristica);
 		
-		return dispositivoDAO.insertar(dispositivo);
+		return dispositivoDAO.modificar(dispositivo);
 	
 	}
 	
@@ -112,11 +111,6 @@ public class DispositivoService {
 			throws ServiceException, DaoException{
 		
 		Dispositivo dispositivo = null;
-		
-		
-		if(dispositivoDAO.obtener(codigo)!=null){
-			throw new DaoException("Ya existe un dispositivo con codigo" + codigo +  " en el sistema");
-		}
 		
 		dispositivo = dispositivoDAO.obtener(codigo);
 		if(dispositivo==null){
@@ -152,7 +146,19 @@ public class DispositivoService {
 		
 		return dispositivo;
 	}
-
+	
+	/**
+	 * Obtiene todos los dispositivos que se encuentran
+	 * almacenados en la base de datos.
+	 * @return
+	 * @throws DaoException
+	 */
+	public List<Dispositivo> obtenerTodos() throws DaoException{
+		List<Dispositivo> dispositivos = null;
+		dispositivos = dispositivoDAO.obtener();
+		return dispositivos;
+	}
+	
 	/**
 	 * @return the dispositivoDAO
 	 */
