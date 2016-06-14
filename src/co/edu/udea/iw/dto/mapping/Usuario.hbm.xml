@@ -22,7 +22,7 @@
         <property name="contrasena" type="java.lang.String" access="field">
             <column name="CONTRASENA" not-null="true" length="15"/>
         </property>
-        <many-to-one name="rol" class="co.edu.udea.iw.dto.Rol" fetch="join">
+        <many-to-one name="rol" class="co.edu.udea.iw.dto.Rol" fetch="join" lazy="false">
             <column name="ROL_ID" not-null="true"/>
         </many-to-one>
     </class>

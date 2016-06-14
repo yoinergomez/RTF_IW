@@ -6,10 +6,10 @@
     <class name="co.edu.udea.iw.dto.Solicitud" table="SOLICITUD">
     
     	<composite-id name="id" class="co.edu.udea.iw.dto.SolicitudId">
-    		<key-many-to-one name="usuario" class="co.edu.udea.iw.dto.Usuario">
+    		<key-many-to-one name="usuario" class="co.edu.udea.iw.dto.Usuario" lazy= "false">
     			<column name="UsuarioId" length="50"></column>
     		</key-many-to-one>
-    		<key-many-to-one name="dispositivo" class="co.edu.udea.iw.dto.Dispositivo">
+    		<key-many-to-one name="dispositivo" class="co.edu.udea.iw.dto.Dispositivo" lazy="false">
     			<column name="DispositivoId" precision="12"></column>
     		</key-many-to-one>
     		<key-property name="fechaInicio" type="java.util.Date">
