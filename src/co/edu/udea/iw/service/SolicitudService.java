@@ -102,11 +102,11 @@ public class SolicitudService {
 		Date fechaInicioSolicitud=null;
 		Date fechaFinSolicitudEnPrestamo=null;
 		Date fechaMenor=null;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy hh:mm");
 		try{
 			fechaInicioSolicitud=solicitud.getId().getFechaInicio();
 			usuario=solicitud.getId().getUsuario();
-			fechaMenor=dateFormat.parse("10-05-2017 00:00:00");
+			fechaMenor=dateFormat.parse("2017-05-03 00:00");
 			solicitudes=solicitudDAO.obtenerSolicitudesDeUnUsuario(usuario, 2);
 			for(Solicitud s:solicitudes){
 				fechaFinSolicitudEnPrestamo=s.getId().getFechaFin();
@@ -150,7 +150,7 @@ public class SolicitudService {
 	public void registrarSolicitud(String correo, int codigoDispositivo,
 			String fechaInicio, String fechaFin,
 			String motivo) throws DaoException, ServiceException, DaoException, ParseException{
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy HH:mm");
 		Usuario usuario=null;
 		Dispositivo dispositivo=null;
 		Date fechaInicioSolicitud=null;
@@ -176,10 +176,13 @@ public class SolicitudService {
 			throw new ServiceException("El dispositivo no existe en el sistema");
 		}
 		
+		fechaInicio = fechaInicio.replace('T', ' ');
+		
 		fechaInicioSolicitud=dateFormat.parse(fechaInicio);
 		if(fechaInicioSolicitud==null){
 			throw new ServiceException("la fecha inicial no es valida");
 		}
+		fechaFin = fechaFin.replace('T', ' ');
 		fechaFinSolicitud=dateFormat.parse(fechaFin);
 		if(fechaFinSolicitud==null){
 			throw new ServiceException("la fecha final no es valida");
@@ -364,7 +367,7 @@ public class SolicitudService {
 	 */
 	public Solicitud buscarSolicitud(String correo, int codigoDispositivo,
 			String fechaInicio, String fechaFin) throws DaoException, ServiceException, DaoException, ParseException {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy HH:mm");
 		Usuario usuario=null;
 		Dispositivo dispositivo=null;
 		Date fechaInicioSolicitud=null;
