@@ -145,8 +145,7 @@ public class SolicitudServiceTest {
 	public void testRegistrarSolicitud() throws ServiceException{
 		try{
 			solicitudService.registrarSolicitud("santiago@udea", 1, 
-					"15-03-2016 12:10:00", "15-03-2016 12:50:00", 
-					1, "Para una investigacion");
+					"15-03-2016 12:10:00", "15-03-2016 12:50:00", "Para una investigacion");
 		} catch(ServiceException e){
 			new ServiceException(e.getMessage());
 			fail(e.getMessage());

@@ -141,7 +141,6 @@ public class SolicitudService {
 	 * @param codigoDispositivo
 	 * @param fechaInicio
 	 * @param fechaFin
-	 * @param estadoSolicitud
 	 * @param motivo
 	 * @throws DaoException
 	 * @throws ServiceException
@@ -149,7 +148,7 @@ public class SolicitudService {
 	 * @throws ParseException
 	 */
 	public void registrarSolicitud(String correo, int codigoDispositivo,
-			String fechaInicio, String fechaFin, int estadoSolicitud,
+			String fechaInicio, String fechaFin,
 			String motivo) throws DaoException, ServiceException, DaoException, ParseException{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy HH:mm:ss");
 		Usuario usuario=null;
@@ -213,7 +212,7 @@ public class SolicitudService {
 		}
 		solicitud=new Solicitud();
 		solicitud.setId(id);
-		solicitud.setEstadoSolicitud(estadoSolicitud);
+		solicitud.setEstadoSolicitud(1);
 		solicitud.setMotivo(motivo);
 		if(!estaDisponibleDispositivo(solicitud)){
 			throw new ServiceException("El dispositivo no esta disponible en el horario especificado");
@@ -305,6 +304,114 @@ public class SolicitudService {
 		solicitud.setEstadoSolicitud(estado);
 		solicitudDAO.modificar(solicitud);
 	}
+	
+	/**
+	 * El administrador o empleado cambia la solicitud de un prestamo.
+	 * @param empleado
+	 * @param cliente
+	 * @param estado
+	 * @param solicitud
+	 * @throws ServiceException
+	 * @throws DaoException
+	 */
+	public Solicitud cambiarEstadoSolicitud(String empleadoCorreo,int estado, SolicitudId solicitudId) throws ServiceException, DaoException{
+		Usuario empleado=null;
+		Usuario cliente=null;
+		if(estado<1 || estado>3){
+			throw new ServiceException("El estado ingresado no es válido");
+		}
+		if(Validaciones.isTextoVacio(empleadoCorreo)){
+			throw new ServiceException("El correo del empleado no puede ser vacio ");
+		}
+		empleado = usuarioDAO.obtener(empleadoCorreo);
+		if(empleado==null){
+			throw new ServiceException("El empleado no existe");
+		}
+		if(empleado.getRol().getId()==3){
+			throw new ServiceException("El usuario no puede realizar un cambio de solicitud");
+		}
+		
+		if(solicitudId==null){
+			throw new ServiceException("La identificacion de la solicitud no puede ser vacia");
+		}
+		cliente = solicitudId.getUsuario();
+		if(cliente==null){
+			throw new ServiceException("El usuario no existe");
+		}
+	
+		Solicitud solicitud = solicitudDAO.obtenerSolicitud(solicitudId);
+		if(solicitud==null){
+			throw new ServiceException("No se encontro solicitud asociada a la id");
+		}
+		solicitud.setEstadoSolicitud(estado);
+		solicitudDAO.modificar(solicitud);
+		return solicitud;
+	}
+	
+	
+	/**
+	 * Se busca una solicitud por medio de los atributos que son clave primaria en la 
+	 * entidad Solicitud
+	 * @param correo
+	 * @param codigoDispositivo
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @return
+	 * @throws DaoException
+	 * @throws ServiceException
+	 * @throws DaoException
+	 * @throws ParseException
+	 */
+	public Solicitud buscarSolicitud(String correo, int codigoDispositivo,
+			String fechaInicio, String fechaFin) throws DaoException, ServiceException, DaoException, ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-M-yyyy HH:mm:ss");
+		Usuario usuario=null;
+		Dispositivo dispositivo=null;
+		Date fechaInicioSolicitud=null;
+		Date fechaFinSolicitud=null;
+		SolicitudId id=null;
+		Solicitud solicitud=null;
+		if(Validaciones.isTextoVacio(correo)){
+			throw new ServiceException("El correo no puede ser vacio");
+		}
+		if(Validaciones.isTextoVacio(fechaInicio)){
+			throw new ServiceException("La fecha inicial de la solicitud no puede ser vacia");
+		}
+		if(Validaciones.isTextoVacio(fechaFin)){
+			throw new ServiceException("La fecha final de la solicitud no puede ser vacia");
+		}
+		usuario=usuarioDAO.obtener(correo);
+		if(usuario==null){
+			throw new ServiceException("El usuario no existe en el sistema");
+		}
+		
+		dispositivo=dispositivoDAO.obtener(codigoDispositivo);
+		if(dispositivo==null){
+			throw new ServiceException("El dispositivo no existe en el sistema");
+		}
+		
+		fechaInicioSolicitud=dateFormat.parse(fechaInicio);
+		if(fechaInicioSolicitud==null){
+			throw new ServiceException("la fecha inicial no es valida");
+		}
+		fechaFinSolicitud=dateFormat.parse(fechaFin);
+		if(fechaFinSolicitud==null){
+			throw new ServiceException("la fecha final no es valida");
+		}
+		
+		id=new SolicitudId();
+		id.setUsuario(usuario);
+		id.setDispositivo(dispositivo);
+		id.setFechaInicio(fechaInicioSolicitud);
+		id.setFechaFin(fechaFinSolicitud);
+		solicitud=solicitudDAO.obtenerSolicitud(id);
+		if(solicitud==null){
+			throw new ServiceException("No se encontro solicitud asociada a la id");
+		}
+		return solicitud;
+		
+	}
+	
 
 	public UsuarioDAO getUsuarioDAO() {
 		return usuarioDAO;
