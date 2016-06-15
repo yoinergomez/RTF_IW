@@ -247,7 +247,7 @@ public class SolicitudService {
 	}
 
 	/**
-	 * Obtiene todos los dispositivos que están disponibles
+	 * Obtiene todos los dispositivos que estï¿½n disponibles
 	 * @return
 	 * @throws DaoException
 	 */
@@ -280,8 +280,8 @@ public class SolicitudService {
 	public Solicitud cambiarEstadoSolicitud(String empleadoCorreo,int estado, SolicitudId solicitudId) throws ServiceException, DaoException{
 		Usuario empleado=null;
 		Usuario cliente=null;
-		if(estado<1 || estado>3){
-			throw new ServiceException("El estado ingresado no es válido");
+		if(estado<0 || estado>3){
+			throw new ServiceException("El estado ingresado no es vï¿½lido");
 		}
 		if(Validaciones.isTextoVacio(empleadoCorreo)){
 			throw new ServiceException("El correo del empleado no puede ser vacio ");
